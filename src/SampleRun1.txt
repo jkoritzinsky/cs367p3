@@ -1,0 +1,516 @@
+[anon@root]: he
+	 Main Menu Help 
+====================================
+au <username> : Registers as a new user 
+du <username> : De-registers a existing user 
+li <username> : To login 
+qu : To exit 
+====================================
+
+[anon@root]: au user1
+SUCCESS
+[anon@root]: li user1
+SUCCESS
+[user1@root]: he
+	 User Menu Help 
+====================================
+ar <reponame> : To add a new repo 
+dr <reponame> : To delete a repo 
+or <reponame> : To open repo 
+lr : To list repo 
+lo : To logout 
+====================================
+
+[user1@root]: lr
+=================================== 
+Username: user1
+-----------Repos------------------ 
+0 repo(s) subscribed.
+===================================
+[user1@root]: ar repo1
+SUCCESS
+[user1@root]: lr
+=================================== 
+Username: user1
+-----------Repos------------------ 
+1. repo1
+1 repo(s) subscribed.
+===================================
+[user1@root]: ar repo2
+SUCCESS
+[user1@root]: lr
+=================================== 
+Username: user1
+-----------Repos------------------ 
+1. repo1
+2. repo2
+2 repo(s) subscribed.
+===================================
+[user1@root]: or repo1
+SUCCESS
+[user1@repo1]: he
+	 Repo Menu Help 
+====================================
+su <username> : To subcribe users to repo 
+ci: To check in changes 
+co: To check out changes 
+rc: To review change 
+vh: To get revision history 
+re: To revert to previous version 
+ld : To list documents 
+ed <docname>: To edit doc 
+ad <docname>: To add doc 
+dd <docname>: To delete doc 
+vd <docname>: To view doc 
+qu : To quit 
+====================================
+
+[user1@repo1]: su user2
+USER_NOT_FOUND
+[user1@repo1]: su user1
+SUCCESS
+[user1@repo1]: su user1
+SUCCESS
+[user1@repo1]: ld
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+0 document(s) found.
+===================================
+[user1@repo1]: ci
+NO_LOCAL_CHANGES
+[user1@repo1]: co
+SUCCESS
+[user1@repo1]: ld
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+0 document(s) found.
+===================================
+[user1@repo1]: vh
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+0 document(s) found.
+===================================
+
+[user1@repo1]: re
+NO_OLDER_VERSION
+[user1@repo1]: ad doc1
+Enter the file content and press q to quit: 
+This is a dummy document created for demo
+purpose.
+q
+SUCCESS
+[user1@repo1]: ld
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+1. doc1
+1 document(s) found.
+===================================
+[user1@repo1]: vh
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+0 document(s) found.
+===================================
+
+[user1@repo1]: ci
+SUCCESS
+[user1@repo1]: vh
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+0 document(s) found.
+===================================
+
+[user1@repo1]: rc
+Doc name: doc1
+Change Type: ADD
+
+Approve changes? Press y to accept: y
+SUCCESS
+[user1@repo1]: vh
+=================================== 
+Reponame: repo1		Version: 1
+-----------Documents--------------- 
+1. doc1
+1 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+0 document(s) found.
+===================================
+
+[user1@repo1]: ld
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+1. doc1
+1 document(s) found.
+===================================
+[user1@repo1]: ad doc2
+Enter the file content and press q to quit: 
+This is another dummy document.
+q
+SUCCESS
+[user1@repo1]: ld
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+1. doc1
+2. doc2
+2 document(s) found.
+===================================
+[user1@repo1]: vh
+=================================== 
+Reponame: repo1		Version: 1
+-----------Documents--------------- 
+1. doc1
+1 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+0 document(s) found.
+===================================
+
+[user1@repo1]: ci
+SUCCESS
+[user1@repo1]: rc
+Doc name: doc2
+Change Type: ADD
+
+Approve changes? Press y to accept: y
+SUCCESS
+[user1@repo1]: vh
+=================================== 
+Reponame: repo1		Version: 2
+-----------Documents--------------- 
+1. doc1
+2. doc2
+2 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 1
+-----------Documents--------------- 
+1. doc1
+1 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+0 document(s) found.
+===================================
+
+[user1@repo1]: ld
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+1. doc1
+2. doc2
+2 document(s) found.
+===================================
+[user1@repo1]: dd doc1
+SUCCESS
+[user1@repo1]: ld
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+1. doc2
+1 document(s) found.
+===================================
+[user1@repo1]: vh
+=================================== 
+Reponame: repo1		Version: 2
+-----------Documents--------------- 
+1. doc1
+2. doc2
+2 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 1
+-----------Documents--------------- 
+1. doc1
+1 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+0 document(s) found.
+===================================
+
+[user1@repo1]: ci
+SUCCESS
+[user1@repo1]: rc
+Doc name: doc1
+Change Type: DEL
+
+Approve changes? Press y to accept: y
+SUCCESS
+[user1@repo1]: vh
+=================================== 
+Reponame: repo1		Version: 3
+-----------Documents--------------- 
+1. doc2
+1 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 2
+-----------Documents--------------- 
+1. doc1
+2. doc2
+2 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 1
+-----------Documents--------------- 
+1. doc1
+1 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+0 document(s) found.
+===================================
+
+[user1@repo1]: ed doc2
+Enter the file content and press q to quit: 
+This is a edited document
+for demo purpose.
+q
+SUCCESS
+[user1@repo1]: vd doc2
+Document name: doc2
+---------------------------------------
+This is a edited document
+for demo purpose.
+
+[user1@repo1]: ci
+SUCCESS
+[user1@repo1]: rc
+Doc name: doc2
+Change Type: EDIT
+
+Approve changes? Press y to accept: y
+SUCCESS
+[user1@repo1]: vh
+=================================== 
+Reponame: repo1		Version: 4
+-----------Documents--------------- 
+1. doc2
+1 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 3
+-----------Documents--------------- 
+1. doc2
+1 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 2
+-----------Documents--------------- 
+1. doc1
+2. doc2
+2 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 1
+-----------Documents--------------- 
+1. doc1
+1 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+0 document(s) found.
+===================================
+
+[user1@repo1]: ld
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+1. doc2
+1 document(s) found.
+===================================
+[user1@repo1]: re
+SUCCESS
+[user1@repo1]: vh
+=================================== 
+Reponame: repo1		Version: 3
+-----------Documents--------------- 
+1. doc2
+1 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 2
+-----------Documents--------------- 
+1. doc1
+2. doc2
+2 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 1
+-----------Documents--------------- 
+1. doc1
+1 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+0 document(s) found.
+===================================
+
+[user1@repo1]: ld
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+1. doc2
+1 document(s) found.
+===================================
+[user1@repo1]: vd doc2
+Document name: doc2
+---------------------------------------
+This is a edited document
+for demo purpose.
+
+[user1@repo1]: co
+SUCCESS
+[user1@repo1]: ld
+=================================== 
+Reponame: repo1		Version: 3
+-----------Documents--------------- 
+1. doc2
+1 document(s) found.
+===================================
+[user1@repo1]: vd doc2
+Document name: doc2
+---------------------------------------
+This is another dummy document.
+
+[user1@repo1]: re
+SUCCESS
+[user1@repo1]: vh
+=================================== 
+Reponame: repo1		Version: 2
+-----------Documents--------------- 
+1. doc1
+2. doc2
+2 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 1
+-----------Documents--------------- 
+1. doc1
+1 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+0 document(s) found.
+===================================
+
+[user1@repo1]: ld
+=================================== 
+Reponame: repo1		Version: 3
+-----------Documents--------------- 
+1. doc2
+1 document(s) found.
+===================================
+[user1@repo1]: co
+SUCCESS
+[user1@repo1]: ld
+=================================== 
+Reponame: repo1		Version: 2
+-----------Documents--------------- 
+1. doc1
+2. doc2
+2 document(s) found.
+===================================
+[user1@repo1]: re
+SUCCESS
+[user1@repo1]: vh
+=================================== 
+Reponame: repo1		Version: 1
+-----------Documents--------------- 
+1. doc1
+1 document(s) found.
+===================================
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+0 document(s) found.
+===================================
+
+[user1@repo1]: ld
+=================================== 
+Reponame: repo1		Version: 2
+-----------Documents--------------- 
+1. doc1
+2. doc2
+2 document(s) found.
+===================================
+[user1@repo1]: co
+SUCCESS
+[user1@repo1]: ld
+=================================== 
+Reponame: repo1		Version: 1
+-----------Documents--------------- 
+1. doc1
+1 document(s) found.
+===================================
+[user1@repo1]: re
+SUCCESS
+[user1@repo1]: vh
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+0 document(s) found.
+===================================
+
+[user1@repo1]: ld
+=================================== 
+Reponame: repo1		Version: 1
+-----------Documents--------------- 
+1. doc1
+1 document(s) found.
+===================================
+[user1@repo1]: re
+NO_OLDER_VERSION
+[user1@repo1]: co
+SUCCESS
+[user1@repo1]: ld
+=================================== 
+Reponame: repo1		Version: 0
+-----------Documents--------------- 
+0 document(s) found.
+===================================
+[user1@repo1]: qu
+SUCCESS
+[user1@root]: lr
+=================================== 
+Username: user1
+-----------Repos------------------ 
+1. repo1
+2. repo2
+2 repo(s) subscribed.
+===================================
+[user1@root]: dr repo1
+SUCCESS
+[user1@root]: lr
+=================================== 
+Username: user1
+-----------Repos------------------ 
+1. repo2
+1 repo(s) subscribed.
+===================================
+[user1@root]: lo
+SUCCESS
+[anon@root]: du user1
+SUCCESS
+[anon@root]: li user1
+USER_NOT_FOUND
+[anon@root]: qu
+Quitting the simulation.
