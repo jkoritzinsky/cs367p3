@@ -169,10 +169,11 @@ public class Repo {
 	 * @throws IllegalArgumentException if any argument is null. 
 	 */
 	public ErrorType approveCheckIn(User requestingUser, ChangeSet checkIn) {
-		// TODO: Implement this method. The following lines 
-		// are just meant for the method to compile. You can 
-		// remove or edit it whatever way you like.
-		return null;
+		if(requestingUser == null) throw new IllegalArgumentException("requestingUser");
+		if(checkIn == null) throw new IllegalArgumentException("checkIn");
+		if(requestingUser != admin) return ErrorType.ACCESS_DENIED;
+		//TODO: Apply Changes to Repository
+		return ErrorType.SUCCESS;
 	}
 	
 	/**
@@ -185,9 +186,10 @@ public class Repo {
 	 * @throws IllegalArgumentException if any argument is null. 
 	 */
 	public ErrorType revert(User requestingUser) {
-		// TODO: Implement this method. The following lines 
-		// are just meant for the method to compile. You can 
-		// remove or edit it whatever way you like.
-		return null;
+		if(requestingUser == null) throw new IllegalArgumentException();
+		if(requestingUser != admin) return ErrorType.ACCESS_DENIED;
+		if(versionRecords.isEmpty()) return ErrorType.NO_OLDER_VERSION;
+		//TODO: Revert repository version
+		return ErrorType.SUCCESS;
 	}
 }
