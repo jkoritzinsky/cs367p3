@@ -101,10 +101,9 @@ public class Repo {
 	 * @return The version count.
 	 */
 	public int getVersionCount() {
-		// TODO: Implement this method. The following lines 
-		// are just meant for the method to compile. You can 
-		// remove or edit it in whatever way you like.
-		return 0;
+		// Implemented as per Piazza answer at
+		// https://piazza.com/class/i574bznhxhp2ms?cid=635
+		return versionRecords.size();
 	}
 	
 	/**
