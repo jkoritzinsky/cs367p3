@@ -122,7 +122,15 @@ public class User {
 	 * @throws IllegalArgumentException if any argument is null. 
 	 */
 	public void addToPendingCheckIn(Document doc, Change.Type type, String repoName) {
-		// TODO: Implement this method. 
+		if(doc == null) throw new IllegalArgumentException("doc");
+		if(type == null) throw new IllegalArgumentException("type");
+		if(repoName == null) throw new IllegalArgumentException("repoName");
+		ChangeSet pendingCheckIn = getPendingCheckIn(repoName);
+		if(pendingCheckIn == null) {
+			pendingCheckIn = new ChangeSet(repoName);
+			pendingCheckIns.add(pendingCheckIn);
+		}
+		pendingCheckIn.addChange(doc, type);
 	}
 	
 	/**
