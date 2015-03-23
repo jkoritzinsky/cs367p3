@@ -31,10 +31,10 @@ public class User {
 		// TODO: Implement this method. The following lines 
 		// are just meant for the method to compile. You can 
 		// remove or edit it in whatever way you like.
-		this.userName = null;
-		this.subRepos = null;
-		this.pendingCheckIns = null;
-		this.workingCopies = null;
+		this.userName = userName;
+		this.subRepos = new ArrayList<String>();
+		this.pendingCheckIns = new ArrayList<ChangeSet>();
+		this.workingCopies = new ArrayList<RepoCopy>();
 	}
 	
 	/**
@@ -60,9 +60,12 @@ public class User {
      * @throws IllegalArgumentException if any argument is null. 
      */
     public RepoCopy getWorkingCopy(String repoName) {
-		// TODO: Implement this method. The following lines 
-		// are just meant for the method to compile. You can 
-		// remove or edit it in whatever way you like.
+    	if(repoName == null) throw new IllegalArgumentException("repoName");
+    	for(RepoCopy workingCopy : workingCopies) {
+			if(workingCopy.getReponame().equals(repoName)) {
+				return workingCopy;
+			}
+		}
     	return null;
 	}
     
