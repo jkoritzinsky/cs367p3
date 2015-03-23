@@ -42,6 +42,7 @@ public class Repo {
 		this.docs =  new ArrayList<Document>();
 		this.checkIns =  new SimpleQueue<ChangeSet>();
 		this.versionRecords =  null;
+		versionRecords.push(new RepoCopy(repoName, 0, new ArrayList<Document>()));
 	}
 	
 	/**
@@ -172,6 +173,7 @@ public class Repo {
 		if(checkIn == null) throw new IllegalArgumentException("checkIn");
 		if(requestingUser != admin) return ErrorType.ACCESS_DENIED;
 		//TODO: Apply Changes to Repository
+		// Explanation of how at: https://piazza.com/class/i574bznhxhp2ms?cid=616
 		return ErrorType.SUCCESS;
 	}
 	
@@ -187,7 +189,7 @@ public class Repo {
 	public ErrorType revert(User requestingUser) {
 		if(requestingUser == null) throw new IllegalArgumentException();
 		if(requestingUser != admin) return ErrorType.ACCESS_DENIED;
-		if(versionRecords.isEmpty()) return ErrorType.NO_OLDER_VERSION;
+		if(getVersion() == 0) return ErrorType.NO_OLDER_VERSION;
 		//TODO: Revert repository version
 		return ErrorType.SUCCESS;
 	}
