@@ -133,9 +133,10 @@ public class User {
 	 * @throws IllegalArgumentException if any argument is null. 
 	 */
     public ChangeSet getPendingCheckIn(String repoName) {
-		// TODO: Implement this method. The following lines 
-		// are just meant for the method to compile. You can 
-		// remove or edit it in whatever way you like.
+    	if(repoName == null) throw new IllegalArgumentException("repoName");
+		for(ChangeSet set : pendingCheckIns) {
+			if(set.getReponame().equals(repoName)) return set;
+		}
     	return null;
 	}
     
