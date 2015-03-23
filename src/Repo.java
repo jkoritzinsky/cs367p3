@@ -37,10 +37,10 @@ public class Repo {
 		// TODO: Implement this contructor. The following lines 
 		// are just meant for the method to compile. You should 
 		// remove or edit it in whatever way you like.
-		this.admin = null;
-		this.repoName =  null;
-		this.docs =  null;
-		this.checkIns =  null;
+		this.admin = admin;
+		this.repoName =  repoName;
+		this.docs =  new ArrayList<Document>();
+		this.checkIns =  new SimpleQueue<ChangeSet>();
 		this.versionRecords =  null;
 	}
 	
@@ -123,10 +123,7 @@ public class Repo {
 	 * @return The count of changes.
 	 */
 	public int getCheckInCount() {
-		// TODO: Implement this method. The following lines 
-		// are just meant for the method to compile. You can 
-		// remove or edit it in whatever way you like.
-		return 0;
+		return checkIns.size();
 	}
 	
 	
@@ -136,7 +133,8 @@ public class Repo {
 	 * @throws IllegalArgumentException if any argument is null. 
 	 */
 	public void queueCheckIn(ChangeSet checkIn) {
-		// TODO: Implement this method. 
+		if(checkIn == null) throw new IllegalArgumentException("checkIn");
+		checkIns.enqueue(checkIn);
 	}
 	
 	/**
@@ -148,9 +146,15 @@ public class Repo {
 	 * @throws IllegalArgumentException if any argument is null. 
 	 */
 	public ChangeSet getNextCheckIn(User requestingUser) {
-		// TODO: Implement this method. The following lines 
-		// are just meant for the method to compile. You can 
-		// remove or edit it in whatever way you like.
+		if(requestingUser == null) throw new IllegalArgumentException("requestingUser");
+		if(requestingUser == admin && !checkIns.isEmpty()) {
+			try {
+			return checkIns.dequeue();
+			}
+			catch(EmptyQueueException ex) {
+				return null;
+			}
+		}
 		return null;
 	}
 	
