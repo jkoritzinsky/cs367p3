@@ -157,10 +157,19 @@ public class User {
      * @throws IllegalArgumentException if any argument is null. 
      */
 	public ErrorType checkIn(String repoName) {
-		// TODO: Implement this method. The following lines 
-		// are just meant for the method to compile. You can 
-		// remove or edit it in whatever way you like.
-    	return null;
+		if(repoName == null) throw new IllegalArgumentException("repoName");
+		ChangeSet checkIn = null;
+		for(int i = 0; i < pendingCheckIns.size(); ++i) {
+			ChangeSet set = pendingCheckIns.get(i);
+			if(set.getReponame().equals(repoName)) {
+				checkIn = set;
+				break;
+			}
+		}
+		if(checkIn == null) return ErrorType.NO_LOCAL_CHANGES;
+		Repo repo = VersionControlDb.findRepo(repoName);
+		repo.queueCheckIn(checkIn);
+		return ErrorType.SUCCESS;
 	}
 	
 	/**
@@ -174,10 +183,10 @@ public class User {
 	 * @throws IllegalArgumentException if any argument is null. 
 	 */
 	public ErrorType checkOut (String repoName) {
-		// TODO: Implement this method. The following lines 
-		// are just meant for the method to compile. You can 
-		// remove or edit it in whatever way you like.
-    	return null;
+		if(repoName == null) throw new IllegalArgumentException("repoName");
+		if(!subRepos.contains(repoName)) return ErrorType.REPO_NOT_SUBSCRIBED;
+		//TODO: Implement creating a RepoCopy of a Repo (check-out)
+		return ErrorType.SUCCESS;
 	}
 		
 	@Override
