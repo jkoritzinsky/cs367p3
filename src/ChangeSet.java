@@ -17,11 +17,8 @@ public class ChangeSet {
 	 * @throws IllegalArgumentException if any argument is null.
 	 */
 	public ChangeSet(String repoName) {
-		// TODO: Implement this method. The following lines 
-		// are just meant for the method to compile. You can 
-		// remove or edit it in whatever way you like.
-		this.repoName = null;
-		this.changes = null;
+		this.repoName = repoName;
+		this.changes = new SimpleQueue<Change>();
 	}
 	
 	/**
@@ -31,7 +28,7 @@ public class ChangeSet {
 	 * @throws IllegalArgumentException if any argument is null.
 	 */
 	public void addChange(Document doc, Change.Type type) {
-		// TODO: Implement this method. 
+		changes.enqueue(new Change(doc, type));
 	}
 	
 	/**
@@ -47,10 +44,12 @@ public class ChangeSet {
 	 * @return The next change if present, null otherwise.
 	 */
 	public Change getNextChange() {
-		// TODO: Implement this method. The following lines 
-		// are just meant for the method to compile. You can 
-		// remove or edit it in whatever way you like.
-    	return null;
+		try {
+			return changes.dequeue();
+		}
+		catch(EmptyQueueException ex) {
+			return null;
+		}
 	}
 	
 	/**
@@ -58,10 +57,7 @@ public class ChangeSet {
 	* @return The count of changes.
 	*/
 	public int getChangeCount() {
-		// TODO: Implement this method. The following lines 
-		// are just meant for the method to compile. You can 
-		// remove or edit it in whatever way you like.
-    	return 0;
+		return changes.size();
 	}
 	
 	@Override
