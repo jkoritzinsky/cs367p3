@@ -408,7 +408,7 @@ public class VersionControlApp {
 				break;
 			case VH:
 				if (validateInput1(words)) {
-					// TODO: Implement logic to handle VH.
+					System.out.println(VersionControlDb.findRepo(currRepo).getVersionHistory());
 				}
 				break;
 			case RE:	
