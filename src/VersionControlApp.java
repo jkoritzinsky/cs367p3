@@ -281,11 +281,14 @@ public class VersionControlApp {
 				break;
 			case LR:
 				if (validateInput1(words)) {
-					// TODO: Implement logic to handle LR.
+					System.out.print(logInUser);
 				}
 				break;
 			case OR:
 				if (validateInput2(words)) {
+					if(!logInUser.getAllSubRepos().contains(words[1])) {
+						System.out.println(ErrorType.REPO_NOT_SUBSCRIBED);
+					}
 					// TODO: Implement logic to handle OR.
 				}
 				break;
@@ -330,7 +333,18 @@ public class VersionControlApp {
 			switch (cmd) {
 			case SU:
 				if (validateInput2(words)) {
-					// TODO: Implement logic to handle SU.
+					if(VersionControlDb.findUser(words[1]) != null) {
+						if(VersionControlDb.findUser(words[1]) == logInUser) {
+							VersionControlDb.findUser(words[1]).subscribeRepo(currRepo);
+							System.out.println(ErrorType.SUCCESS);
+						}
+						else {
+							System.out.println(ErrorType.ACCESS_DENIED);
+						}
+					}
+					else {
+						System.out.println(ErrorType.USER_NOT_FOUND);
+					}
 				}
 				break;
 			case LD:
