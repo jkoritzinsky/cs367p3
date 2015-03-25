@@ -333,9 +333,10 @@ public class VersionControlApp {
 			switch (cmd) {
 			case SU:
 				if (validateInput2(words)) {
-					if(VersionControlDb.findUser(words[1]) != null) {
-						if(VersionControlDb.findUser(words[1]) == logInUser) {
-							VersionControlDb.findUser(words[1]).subscribeRepo(currRepo);
+					User user1 = VersionControlDb.findUser(words[1]);
+					if(user1 != null) {
+						if(user1 == VersionControlDb.findRepo(currRepo).getAdmin()) {
+							user1.subscribeRepo(currRepo);
 							System.out.println(ErrorType.SUCCESS);
 						}
 						else {
@@ -349,12 +350,25 @@ public class VersionControlApp {
 				break;
 			case LD:
 				if (validateInput1(words)) {
-					// TODO: Implement logic to handle LD.
+					System.out.println(currRepo.toString());
 				}
 				break;
 			case ED:
 				if (validateInput2(words)) {
-					// TODO: Implement logic to handle ED.
+					if(logInUser.getWorkingCopy(currRepo) != null) {
+						Document doc = logInUser.getWorkingCopy(currRepo).getDoc(words[1]);
+						if(doc != null) {						
+							doc.setContent(promptFileContent("Enter the file content and press q to quit:"));
+							logInUser.addToPendingCheckIn(doc, Change.Type.EDIT, currRepo);
+							System.out.println(ErrorType.SUCCESS);
+						}	
+						else {
+							System.out.println(ErrorType.DOC_NOT_FOUND);
+						}
+					}
+					else {
+						throw new IllegalArgumentException(); 
+					}
 				}					
 				break;
 			case AD:
