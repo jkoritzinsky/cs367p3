@@ -109,7 +109,6 @@ public class Repo {
 	 * @return The string containing the history of changes.
 	 */
 	public String getVersionHistory() {
-		// TODO: In StackADT implementation, implement toString to output in the right format.
 		return versionRecords.toString();
 	}
 	
