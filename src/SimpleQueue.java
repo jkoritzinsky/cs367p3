@@ -48,6 +48,7 @@ public class SimpleQueue<E> implements QueueADT<E> {
 			expand();
 		}
 		items[calculateIndex(numItems)] = item;
+		++numItems;
 	}
 
 
