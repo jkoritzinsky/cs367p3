@@ -27,10 +27,6 @@ public class User {
 	 * @throws IllegalArgumentException if any argument is null. 
 	 */
 	public User(String userName) {
-		
-		// TODO: Implement this method. The following lines 
-		// are just meant for the method to compile. You can 
-		// remove or edit it in whatever way you like.
 		this.userName = userName;
 		this.subRepos = new ArrayList<String>();
 		this.pendingCheckIns = new ArrayList<ChangeSet>();
@@ -185,7 +181,17 @@ public class User {
 	public ErrorType checkOut (String repoName) {
 		if(repoName == null) throw new IllegalArgumentException("repoName");
 		if(!subRepos.contains(repoName)) return ErrorType.REPO_NOT_SUBSCRIBED;
-		//TODO: Implement creating a RepoCopy of a Repo (check-out)
+		// Remove previous working copy if it exists
+		for(int i = 0; i < workingCopies.size(); ++i) {
+			if(workingCopies.get(i).getReponame().equals(repoName)) {
+				workingCopies.remove(i);
+				break;
+			}
+		}
+		// Create and add new working copy
+		Repo repo = VersionControlDb.findRepo(repoName);
+		RepoCopy workingCopy = new RepoCopy(repoName, repo.getVersion(), repo.getDocuments());
+		workingCopies.add(workingCopy);
 		return ErrorType.SUCCESS;
 	}
 		

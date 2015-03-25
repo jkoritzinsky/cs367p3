@@ -254,12 +254,12 @@ public class VersionControlApp {
 			case AR:
 				if (validateInput2(words)) {
 					if(VersionControlDb.findRepo(words[1]) != null) {
-						System.out.println("REPONAME_ALREADY_EXISTS");
+						System.out.println(ErrorType.REPONAME_ALREADY_EXISTS);
 					}
 					else {
 						VersionControlDb.addRepo(words[1], logInUser);
 						logInUser.subscribeRepo(words[1]); //NOT SURE IF NECESSARY
-						System.out.println("SUCCESS");
+						System.out.println(ErrorType.SUCCESS);
 					}
 				}
 				break;
@@ -267,15 +267,15 @@ public class VersionControlApp {
 				if (validateInput2(words)) {
 					if(VersionControlDb.findRepo(words[1]) != null) {
 						if(VersionControlDb.findRepo(words[1]).getAdmin().getName()!=logInUser.getName()) {
-							System.out.println("ACCESS_DENIED");
+							System.out.println(ErrorType.ACCESS_DENIED);
 						}
 						else {
 							VersionControlDb.delRepo(VersionControlDb.findRepo(words[1]));
-							System.out.println("SUCCESS");
+							System.out.println(ErrorType.SUCCESS);
 						}
 					}
 					else {
-						System.out.println("REPO_NOT_FOUND");
+						System.out.println(ErrorType.REPO_NOT_FOUND);
 					}
 				}
 				break;
