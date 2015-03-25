@@ -34,14 +34,11 @@ public class Repo {
 	 * @throws IllegalArgumentException if any argument is null. 
 	 */
 	public Repo(User admin, String repoName) {
-		// TODO: Implement this contructor. The following lines 
-		// are just meant for the method to compile. You should 
-		// remove or edit it in whatever way you like.
 		this.admin = admin;
 		this.repoName =  repoName;
 		this.docs =  new ArrayList<Document>();
 		this.checkIns =  new SimpleQueue<ChangeSet>();
-		this.versionRecords =  null;
+		this.versionRecords =  new SimpleStack<RepoCopy>();
 		versionRecords.push(new RepoCopy(repoName, 0, new ArrayList<Document>()));
 	}
 	
