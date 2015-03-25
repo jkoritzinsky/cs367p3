@@ -77,5 +77,15 @@ public class SimpleQueue<E> implements QueueADT<E> {
 		items = newItems;
 		start = 0;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		for(int i = 0; i < numItems; ++i) {
+			builder.append(items[calculateIndex(i)]);
+			builder.append('\n');
+		}
+		return builder.toString();
+	}
 
 }
