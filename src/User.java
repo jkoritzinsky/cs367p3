@@ -189,6 +189,13 @@ public class User {
 				break;
 			}
 		}
+		// Delete pending check-in if it exists
+		for(int i = 0; i < pendingCheckIns.size(); ++i) {
+			if(pendingCheckIns.get(i).getReponame().equals(repoName)) {
+				pendingCheckIns.remove(i);
+				break;
+			}
+		}
 		// Create and add new working copy
 		Repo repo = VersionControlDb.findRepo(repoName);
 		RepoCopy workingCopy = new RepoCopy(repoName, repo.getVersion(), repo.getDocuments());

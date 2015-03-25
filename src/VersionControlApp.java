@@ -281,15 +281,25 @@ public class VersionControlApp {
 				break;
 			case LR:
 				if (validateInput1(words)) {
-					System.out.print(logInUser);
+					System.out.println(logInUser);
 				}
 				break;
 			case OR:
 				if (validateInput2(words)) {
+					if(VersionControlDb.findRepo(words[1]) == null) {
+						System.out.println(ErrorType.REPO_NOT_FOUND);
+						break;
+					}
 					if(!logInUser.getAllSubRepos().contains(words[1])) {
 						System.out.println(ErrorType.REPO_NOT_SUBSCRIBED);
+						break;
 					}
-					// TODO: Implement logic to handle OR.
+					if(logInUser.getWorkingCopy(words[1]) == null) {
+						logInUser.checkOut(words[1]);
+					}
+					System.out.println(ErrorType.SUCCESS);
+					processRepoMenu(logInUser, words[1]);
+					System.out.println(ErrorType.SUCCESS);
 				}
 				break;
 			case LO:
@@ -335,7 +345,7 @@ public class VersionControlApp {
 				if (validateInput2(words)) {
 					User user1 = VersionControlDb.findUser(words[1]);
 					if(user1 != null) {
-						if(user1 == VersionControlDb.findRepo(currRepo).getAdmin()) {
+						if(logInUser == VersionControlDb.findRepo(currRepo).getAdmin()) {
 							user1.subscribeRepo(currRepo);
 							System.out.println(ErrorType.SUCCESS);
 						}
@@ -350,7 +360,8 @@ public class VersionControlApp {
 				break;
 			case LD:
 				if (validateInput1(words)) {
-					System.out.println(currRepo.toString());
+					RepoCopy workingCopy = logInUser.getWorkingCopy(currRepo);
+					System.out.println(workingCopy);
 				}
 				break;
 			case ED:
@@ -358,7 +369,7 @@ public class VersionControlApp {
 					if(logInUser.getWorkingCopy(currRepo) != null) {
 						Document doc = logInUser.getWorkingCopy(currRepo).getDoc(words[1]);
 						if(doc != null) {						
-							doc.setContent(promptFileContent("Enter the file content and press q to quit:"));
+							doc.setContent(promptFileContent("Enter the file content and press q to quit: "));
 							logInUser.addToPendingCheckIn(doc, Change.Type.EDIT, currRepo);
 							System.out.println(ErrorType.SUCCESS);
 						}	
@@ -367,7 +378,7 @@ public class VersionControlApp {
 						}
 					}
 					else {
-						throw new IllegalArgumentException(); 
+						System.out.println(ErrorType.DOC_NOT_FOUND);
 					}
 				}					
 				break;
@@ -375,7 +386,7 @@ public class VersionControlApp {
 				if (validateInput2(words)) {
 					if(logInUser.getWorkingCopy(currRepo) != null) {
 						if(logInUser.getWorkingCopy(currRepo).getDoc(words[1]) == null) {		
-							Document doc = new Document(words[1], promptFileContent("Enter the file content and press q to quit:"), currRepo);
+							Document doc = new Document(words[1], promptFileContent("Enter the file content and press q to quit: "), currRepo);
 							logInUser.getWorkingCopy(currRepo).addDoc(doc);
 							logInUser.addToPendingCheckIn(doc, Change.Type.ADD, currRepo);
 							System.out.println(ErrorType.SUCCESS);
@@ -385,7 +396,7 @@ public class VersionControlApp {
 						}
 					}
 					else {
-						throw new IllegalArgumentException(); 
+						System.out.println(ErrorType.DOC_NOT_FOUND);
 					}
 				}
 				break;
@@ -403,7 +414,7 @@ public class VersionControlApp {
 						}
 					}
 					else {
-						throw new IllegalArgumentException(); 
+						System.out.println(ErrorType.DOC_NOT_FOUND);
 					}
 				}
 				break;
@@ -419,35 +430,19 @@ public class VersionControlApp {
 							}
 						}
 						else {
-							throw new IllegalArgumentException(); 
+							System.out.println(ErrorType.DOC_NOT_FOUND);
 						}
 					}
 				}
 				break;
 			case CI:
 				if (validateInput1(words)) {
-					if(logInUser.getWorkingCopy(currRepo) != null) {
-						if(logInUser.getPendingCheckIn(currRepo) != null) {
-							logInUser.checkIn(currRepo); 
-						}	
-						else {
-							System.out.println(ErrorType.NO_LOCAL_CHANGES);
-						}
-					}
-					else {
-						throw new IllegalArgumentException(); 
-					}
+					System.out.println(logInUser.checkIn(currRepo));
 				}
 				break;
 			case CO:
 				if (validateInput1(words)) {
-					if(logInUser.getWorkingCopy(currRepo) != null) {
-							logInUser.checkOut(currRepo); 
-					}
-					else {
-						throw new IllegalArgumentException(); 
-					}
-					// TODO: Implement logic to handle CO.
+					System.out.println(logInUser.checkOut(currRepo));
 				}
 				break;
 			case RC:
@@ -458,14 +453,14 @@ public class VersionControlApp {
 						if(repo.getCheckInCount() == 0) {
 							System.out.println(ErrorType.NO_PENDING_CHECKINS);
 						}
-						if(logInUser != repo.getAdmin()) {
+						else if(logInUser != repo.getAdmin()) {
 							System.out.println(ErrorType.ACCESS_DENIED);
 						}
 						break;
 					}
 					do {
 						System.out.println(checkIn);
-						System.out.println("Approve changes? Press y to accept: ");
+						System.out.print("Approve changes? Press y to accept: ");
 						String confirmation = scnr.nextLine();
 						if(confirmation.equals("y")) {
 							repo.approveCheckIn(logInUser, checkIn);
