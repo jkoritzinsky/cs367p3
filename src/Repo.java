@@ -172,8 +172,30 @@ public class Repo {
 		if(requestingUser == null) throw new IllegalArgumentException("requestingUser");
 		if(checkIn == null) throw new IllegalArgumentException("checkIn");
 		if(requestingUser != admin) return ErrorType.ACCESS_DENIED;
-		//TODO: Apply Changes to Repository
 		// Explanation of how at: https://piazza.com/class/i574bznhxhp2ms?cid=616
+		Change currentChange;
+		while((currentChange = checkIn.getNextChange()) != null) {
+			switch(currentChange.getType()) {
+			case ADD:
+				docs.add(currentChange.getDoc());
+				break;
+			case DEL:
+				docs.remove(currentChange.getDoc());
+				break;
+			case EDIT:
+				for(Document doc : docs) {
+					if(doc.equals(currentChange.getDoc())) {
+						doc.setContent(currentChange.getDoc().getContent());
+						break;
+					}
+				}
+				break;
+			default:
+				throw new IllegalArgumentException();
+			}
+		}
+		RepoCopy copy = new RepoCopy(repoName, ++version, getDocuments());
+		versionRecords.push(copy);
 		return ErrorType.SUCCESS;
 	}
 	
