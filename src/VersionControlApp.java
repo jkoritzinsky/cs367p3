@@ -119,7 +119,7 @@ public class VersionControlApp {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Returns the Cmd equivalent for a string command. 
 	 * @param strCmd The string command.
@@ -253,12 +253,30 @@ public class VersionControlApp {
 			switch (cmd) {
 			case AR:
 				if (validateInput2(words)) {
-					// TODO: Implement logic to handle AR.
+					if(VersionControlDb.findRepo(words[1]) != null) {
+						System.out.println("REPONAME_ALREADY_EXISTS");
+					}
+					else {
+						VersionControlDb.addRepo(words[1], logInUser);
+						logInUser.subscribeRepo(words[1]); //NOT SURE IF NECESSARY
+						System.out.println("SUCCESS");
+					}
 				}
 				break;
 			case DR:
 				if (validateInput2(words)) {
-					// TODO: Implement logic to handle DR.
+					if(VersionControlDb.findRepo(words[1]) != null) {
+						if(VersionControlDb.findRepo(words[1]).getAdmin().getName()!=logInUser.getName()) {
+							System.out.println("ACCESS_DENIED");
+						}
+						else {
+							VersionControlDb.delRepo(VersionControlDb.findRepo(words[1]));
+							System.out.println("SUCCESS");
+						}
+					}
+					else {
+						System.out.println("REPO_NOT_FOUND");
+					}
 				}
 				break;
 			case LR:
