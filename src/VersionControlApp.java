@@ -384,7 +384,26 @@ public class VersionControlApp {
 				break;
 			case RC:
 				if (validateInput1(words)) {
-					// TODO: Implement logic to handle RC.
+					Repo repo = VersionControlDb.findRepo(currRepo);
+					ChangeSet checkIn = repo.getNextCheckIn(logInUser);
+					if(checkIn == null) {
+						if(repo.getCheckInCount() == 0) {
+							System.out.println(ErrorType.NO_PENDING_CHECKINS);
+						}
+						if(logInUser != repo.getAdmin()) {
+							System.out.println(ErrorType.ACCESS_DENIED);
+						}
+						break;
+					}
+					do {
+						System.out.println(checkIn);
+						System.out.println("Approve changes? Press y to accept: ");
+						String confirmation = scnr.nextLine();
+						if(confirmation.equals("y")) {
+							repo.approveCheckIn(logInUser, checkIn);
+						}
+					} while((checkIn = repo.getNextCheckIn(logInUser)) != null);
+					System.out.println(ErrorType.SUCCESS);
 				}
 				break;
 			case VH:
