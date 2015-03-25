@@ -413,7 +413,7 @@ public class VersionControlApp {
 				break;
 			case RE:	
 				if (validateInput1(words)) {
-					// TODO: Implement logic to handle RE.
+					System.out.println(VersionControlDb.findRepo(currRepo).revert(logInUser));
 				}
 				break;
 			case HE:
