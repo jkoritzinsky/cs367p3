@@ -212,7 +212,18 @@ public class Repo {
 		if(requestingUser == null) throw new IllegalArgumentException();
 		if(requestingUser != admin) return ErrorType.ACCESS_DENIED;
 		if(getVersion() == 0) return ErrorType.NO_OLDER_VERSION;
-		//TODO: Revert repository version
+		RepoCopy prevVersion = null;
+		try {
+			versionRecords.pop(); // Remove most recent version
+			prevVersion = versionRecords.peek(); // Load previous version
+		}
+		catch (EmptyStackException e) {
+		}
+		docs.clear(); // Remove all current docs
+		for(Document doc : prevVersion.getDocuments()) { // Restore all prev docs
+			docs.add(new Document(doc.getName(), doc.getContent(), doc.getRepoName()));
+		}
+		--version;
 		return ErrorType.SUCCESS;
 	}
 }
