@@ -373,26 +373,80 @@ public class VersionControlApp {
 				break;
 			case AD:
 				if (validateInput2(words)) {
-					// TODO: Implement logic to handle AD.
+					if(logInUser.getWorkingCopy(currRepo) != null) {
+						if(logInUser.getWorkingCopy(currRepo).getDoc(words[1]) == null) {		
+							Document doc = new Document(words[1], promptFileContent("Enter the file content and press q to quit:"), currRepo);
+							logInUser.getWorkingCopy(currRepo).addDoc(doc);
+							logInUser.addToPendingCheckIn(doc, Change.Type.ADD, currRepo);
+							System.out.println(ErrorType.SUCCESS);
+						}	
+						else {
+							System.out.println(ErrorType.DOCNAME_ALREADY_EXISTS);
+						}
+					}
+					else {
+						throw new IllegalArgumentException(); 
+					}
 				}
 				break;
 			case DD:
 				if (validateInput2(words)) {
-					// TODO: Implement logic to handle DD.
+					if(logInUser.getWorkingCopy(currRepo) != null) {
+						if(logInUser.getWorkingCopy(currRepo).getDoc(words[1]) != null) {		
+							Document doc = logInUser.getWorkingCopy(currRepo).getDoc(words[1]);
+							logInUser.getWorkingCopy(currRepo).delDoc(doc);
+							logInUser.addToPendingCheckIn(doc, Change.Type.DEL, currRepo);
+							System.out.println(ErrorType.SUCCESS);
+						}	
+						else {
+							System.out.println(ErrorType.DOC_NOT_FOUND);
+						}
+					}
+					else {
+						throw new IllegalArgumentException(); 
+					}
 				}
 				break;
 			case VD:
 				if (validateInput2(words)) {
-					// TODO: Implement logic to handle VD.
+					if (validateInput2(words)) {
+						if(logInUser.getWorkingCopy(currRepo) != null) {
+							if(logInUser.getWorkingCopy(currRepo).getDoc(words[1]) != null) {		
+								System.out.println(logInUser.getWorkingCopy(currRepo).getDoc(words[1]).toString());
+							}	
+							else {
+								System.out.println(ErrorType.DOC_NOT_FOUND);
+							}
+						}
+						else {
+							throw new IllegalArgumentException(); 
+						}
+					}
 				}
 				break;
 			case CI:
 				if (validateInput1(words)) {
-					// TODO: Implement logic to handle CI.
+					if(logInUser.getWorkingCopy(currRepo) != null) {
+						if(logInUser.getPendingCheckIn(currRepo) != null) {
+							logInUser.checkIn(currRepo); 
+						}	
+						else {
+							System.out.println(ErrorType.NO_LOCAL_CHANGES);
+						}
+					}
+					else {
+						throw new IllegalArgumentException(); 
+					}
 				}
 				break;
 			case CO:
 				if (validateInput1(words)) {
+					if(logInUser.getWorkingCopy(currRepo) != null) {
+							logInUser.checkOut(currRepo); 
+					}
+					else {
+						throw new IllegalArgumentException(); 
+					}
 					// TODO: Implement logic to handle CO.
 				}
 				break;
