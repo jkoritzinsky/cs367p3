@@ -237,22 +237,24 @@ public class VersionControlApp {
 	 * @throws IllegalArgumentException in case any argument is null.
 	 */
 	public static void processUserMenu(User logInUser) {
-
+		// Prevents the user from logging in without a username
 		if (logInUser == null) {
 			throw new IllegalArgumentException();
 		}
-
+		
 		String userPrompt = "[" + logInUser.getName() + "@root" + "]: ";
 		boolean execute = true;
-
+		//A loop over the user menu
 		while (execute) {
-
+			//Asks the user for commands
 			String[] words = prompt(userPrompt);
+			//gets the first two characters from the input to turn into a command
 			Cmd cmd = stringToCmd(words[0]);
 
 			switch (cmd) {
+			//This case adds a repository if there is no existing repository with the same name
 			case AR:
-				if (validateInput2(words)) {
+				if (validateInput2(words)) { 
 					if(VersionControlDb.findRepo(words[1]) != null) {
 						System.out.println(ErrorType.REPONAME_ALREADY_EXISTS);
 					}
