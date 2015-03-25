@@ -159,6 +159,7 @@ public class User {
 			ChangeSet set = pendingCheckIns.get(i);
 			if(set.getReponame().equals(repoName)) {
 				checkIn = set;
+				pendingCheckIns.remove(i);
 				break;
 			}
 		}
