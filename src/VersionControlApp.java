@@ -255,23 +255,26 @@ public class VersionControlApp {
 			//This case adds a repository if there is no existing repository with the same name
 			case AR:
 				if (validateInput2(words)) { 
-					if(VersionControlDb.findRepo(words[1]) != null) {
+					if(VersionControlDb.findRepo(words[1]) != null) { //If the repo exists
 						System.out.println(ErrorType.REPONAME_ALREADY_EXISTS);
 					}
-					else {
-						VersionControlDb.addRepo(words[1], logInUser);
-						logInUser.subscribeRepo(words[1]); //NOT SURE IF NECESSARY
+					else { 
+						VersionControlDb.addRepo(words[1], logInUser); //adds the repository
+						logInUser.subscribeRepo(words[1]);  //automatically subscribes the user
 						System.out.println(ErrorType.SUCCESS);
 					}
-				}
+				} 
 				break;
+				//This case deletes a repository if the repository exists
 			case DR:
 				if (validateInput2(words)) {
-					if(VersionControlDb.findRepo(words[1]) != null) {
-						if(VersionControlDb.findRepo(words[1]).getAdmin().getName()!=logInUser.getName()) {
+					if(VersionControlDb.findRepo(words[1]) != null) { //If the repository exists
+						if(VersionControlDb.findRepo(words[1]).getAdmin().getName() != 
+								logInUser.getName()) { //If the current user is not the admin of the repo
 							System.out.println(ErrorType.ACCESS_DENIED);
 						}
 						else {
+							//Deletes the repo
 							VersionControlDb.delRepo(VersionControlDb.findRepo(words[1]));
 							System.out.println(ErrorType.SUCCESS);
 						}
@@ -281,39 +284,44 @@ public class VersionControlApp {
 					}
 				}
 				break;
+				//This case lists the repositories of the logged in user
 			case LR:
 				if (validateInput1(words)) {
 					System.out.println(logInUser);
 				}
 				break;
+				//This case opens a repository specified by the user
 			case OR:
 				if (validateInput2(words)) {
-					if(VersionControlDb.findRepo(words[1]) == null) {
+					if(VersionControlDb.findRepo(words[1]) == null) { //If the repo exists
 						System.out.println(ErrorType.REPO_NOT_FOUND);
 						break;
 					}
-					if(!logInUser.getAllSubRepos().contains(words[1])) {
+					if(!logInUser.getAllSubRepos().contains(words[1])) { //If the user is subscribed to the repo
 						System.out.println(ErrorType.REPO_NOT_SUBSCRIBED);
 						break;
 					}
-					if(logInUser.getWorkingCopy(words[1]) == null) {
+					if(logInUser.getWorkingCopy(words[1]) == null) { //gets a copy of the repo
 						logInUser.checkOut(words[1]);
 					}
 					System.out.println(ErrorType.SUCCESS);
-					processRepoMenu(logInUser, words[1]);
+					processRepoMenu(logInUser, words[1]); //Enters the repo menu
 					System.out.println(ErrorType.SUCCESS);
 				}
 				break;
+				//This case logs out the user
 			case LO:
 				if (validateInput1(words)) {
 					execute = false;
 				}
 				break;
+				//This case displays the help menu
 			case HE:
 				if (validateInput1(words)) {
 					displayUserMenu();
 				}
 				break;
+				//This will trigger if the user types in an invalid command
 			default:
 				System.out.println(ErrorType.UNKNOWN_COMMAND);
 			}
@@ -329,29 +337,31 @@ public class VersionControlApp {
 	 * @throws IllegalArgumentException in case any argument is null.
 	 */
 	public static void processRepoMenu(User logInUser, String currRepo) {
-
+		//Prevents the menu from being accessed if the user or repo are invalid
 		if (logInUser  == null || currRepo == null) {
 			throw new IllegalArgumentException();
 		}
-
+		
 		String repoPrompt = "["+ logInUser.getName() + "@" + currRepo + "]: ";
 		boolean execute = true;
-
+		//A loop over the repo menu
 		while (execute) {
-
+			// prompts the user
 			String[] words = prompt(repoPrompt);
+			// Shortens the input to command size
 			Cmd cmd = stringToCmd(words[0]);
 
 			switch (cmd) {
+			//This case will subscribed the user to the specified repo
 			case SU:
 				if (validateInput2(words)) {
-					User user1 = VersionControlDb.findUser(words[1]);
+					User user1 = VersionControlDb.findUser(words[1]); //A dummy variable to shorten code
 					if(user1 != null) {
-						if(logInUser == VersionControlDb.findRepo(currRepo).getAdmin()) {
-							user1.subscribeRepo(currRepo);
+						if(logInUser == VersionControlDb.findRepo(currRepo).getAdmin()) {//If the current user is the admin of the repo
+							user1.subscribeRepo(currRepo); //Subscribes the user
 							System.out.println(ErrorType.SUCCESS);
 						}
-						else {
+						else { //Occurs if the user is not the admin
 							System.out.println(ErrorType.ACCESS_DENIED);
 						}
 					}
@@ -360,22 +370,25 @@ public class VersionControlApp {
 					}
 				}
 				break;
+				//This case lists the documents of a repository
 			case LD:
 				if (validateInput1(words)) {
 					RepoCopy workingCopy = logInUser.getWorkingCopy(currRepo);
 					System.out.println(workingCopy);
 				}
 				break;
+				//This case Edits a document in the repo
 			case ED:
 				if (validateInput2(words)) {
 					if(logInUser.getWorkingCopy(currRepo) != null) {
-						Document doc = logInUser.getWorkingCopy(currRepo).getDoc(words[1]);
-						if(doc != null) {						
+						Document doc = logInUser.getWorkingCopy(currRepo).getDoc(words[1]); //A dummy variable
+						if(doc != null) {			
+							//Prompts the user for new file content
 							doc.setContent(promptFileContent("Enter the file content and press q to quit: "));
-							logInUser.addToPendingCheckIn(doc, Change.Type.EDIT, currRepo);
+							logInUser.addToPendingCheckIn(doc, Change.Type.EDIT, currRepo); //Adds the changes
 							System.out.println(ErrorType.SUCCESS);
 						}	
-						else {
+						else { //Occurs if the document doesn't exist
 							System.out.println(ErrorType.DOC_NOT_FOUND);
 						}
 					}
@@ -384,16 +397,18 @@ public class VersionControlApp {
 					}
 				}					
 				break;
+				//This case adds a new document if the document name isn't taken
 			case AD:
 				if (validateInput2(words)) {
 					if(logInUser.getWorkingCopy(currRepo) != null) {
-						if(logInUser.getWorkingCopy(currRepo).getDoc(words[1]) == null) {		
+						if(logInUser.getWorkingCopy(currRepo).getDoc(words[1]) == null) { //if the doc doesn't exist	
+							//Prompts the user for content for the file
 							Document doc = new Document(words[1], promptFileContent("Enter the file content and press q to quit: "), currRepo);
-							logInUser.getWorkingCopy(currRepo).addDoc(doc);
-							logInUser.addToPendingCheckIn(doc, Change.Type.ADD, currRepo);
+							logInUser.getWorkingCopy(currRepo).addDoc(doc); //adds the doc
+							logInUser.addToPendingCheckIn(doc, Change.Type.ADD, currRepo); //queues the changes
 							System.out.println(ErrorType.SUCCESS);
 						}	
-						else {
+						else { //Occurs if the doc exists
 							System.out.println(ErrorType.DOCNAME_ALREADY_EXISTS);
 						}
 					}
@@ -402,16 +417,19 @@ public class VersionControlApp {
 					}
 				}
 				break;
+				//This case deletes a document
 			case DD:
 				if (validateInput2(words)) {
 					if(logInUser.getWorkingCopy(currRepo) != null) {
-						if(logInUser.getWorkingCopy(currRepo).getDoc(words[1]) != null) {		
+						if(logInUser.getWorkingCopy(currRepo).getDoc(words[1]) != null) { //If the document exists		
 							Document doc = logInUser.getWorkingCopy(currRepo).getDoc(words[1]);
+							//deletes the document
 							logInUser.getWorkingCopy(currRepo).delDoc(doc);
+							//queues the change
 							logInUser.addToPendingCheckIn(doc, Change.Type.DEL, currRepo);
 							System.out.println(ErrorType.SUCCESS);
 						}	
-						else {
+						else { //Occurs if the document doesn't exist
 							System.out.println(ErrorType.DOC_NOT_FOUND);
 						}
 					}
@@ -420,14 +438,16 @@ public class VersionControlApp {
 					}
 				}
 				break;
+				//This case shows the user a document
 			case VD:
 				if (validateInput2(words)) {
 					if (validateInput2(words)) {
 						if(logInUser.getWorkingCopy(currRepo) != null) {
-							if(logInUser.getWorkingCopy(currRepo).getDoc(words[1]) != null) {		
+							if(logInUser.getWorkingCopy(currRepo).getDoc(words[1]) != null) {//If the document exists
+								//Prints the document
 								System.out.println(logInUser.getWorkingCopy(currRepo).getDoc(words[1]).toString());
 							}	
-							else {
+							else { //Occurs if the document doesn't exist
 								System.out.println(ErrorType.DOC_NOT_FOUND);
 							}
 						}
@@ -437,55 +457,62 @@ public class VersionControlApp {
 					}
 				}
 				break;
+				//This case checks in the repo
 			case CI:
 				if (validateInput1(words)) {
 					System.out.println(logInUser.checkIn(currRepo));
 				}
-				break;
+				break; 
+				//This case checks out the repo
 			case CO:
 				if (validateInput1(words)) {
 					System.out.println(logInUser.checkOut(currRepo));
 				}
 				break;
+				//This case allows the user to review and accept/deny checkins
 			case RC:
 				if (validateInput1(words)) {
 					Repo repo = VersionControlDb.findRepo(currRepo);
 					ChangeSet checkIn = repo.getNextCheckIn(logInUser);
 					if(checkIn == null) {
-						if(repo.getCheckInCount() == 0) {
+						if(repo.getCheckInCount() == 0) { //If the queue is empty
 							System.out.println(ErrorType.NO_PENDING_CHECKINS);
 						}
-						else if(logInUser != repo.getAdmin()) {
+						else if(logInUser != repo.getAdmin()) { //If the user isn't the repo admin
 							System.out.println(ErrorType.ACCESS_DENIED);
 						}
 						break;
 					}
 					do {
 						System.out.println(checkIn);
-						System.out.print("Approve changes? Press y to accept: ");
-						String confirmation = scnr.nextLine();
+						System.out.print("Approve changes? Press y to accept: "); //prompts the user for input
+						String confirmation = scnr.nextLine(); //gets the input
 						if(confirmation.equals("y")) {
-							repo.approveCheckIn(logInUser, checkIn);
+							repo.approveCheckIn(logInUser, checkIn); //checks in if the user agrees
 						}
-					} while((checkIn = repo.getNextCheckIn(logInUser)) != null);
+					} while((checkIn = repo.getNextCheckIn(logInUser)) != null); //quits after each checkin has been approved or not
 					System.out.println(ErrorType.SUCCESS);
 				}
 				break;
+				//This case displays the version history
 			case VH:
 				if (validateInput1(words)) {
 					System.out.println(VersionControlDb.findRepo(currRepo).getVersionHistory());
 				}
 				break;
+				//This case reverts the repository
 			case RE:	
 				if (validateInput1(words)) {
 					System.out.println(VersionControlDb.findRepo(currRepo).revert(logInUser));
 				}
 				break;
+				//This case displays the repo help menu
 			case HE:
 				if (validateInput1(words)) {
 					displayRepoMenu();
 				}
-				break;
+				break; 
+				//This case quits the repo menu
 			case QU:
 				if (validateInput1(words)) {
 					execute = false;
