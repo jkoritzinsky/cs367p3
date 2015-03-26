@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////
+//                   ALL STUDENTS COMPLETE THESE SECTIONS
+// Main Class File:  VersionControlApp.java
+// Semester:         CS367 Spring 2015
+//
+// Author:           Jeremy Koritzinsky
+// Email:            jeremy.koritzinsky@wisc.edu
+// CS Login:         koritzinsky
+// Lecturer's Name:  Jim Skrentny
+//
+//////////////////// PAIR PROGRAMMERS COMPLETE THIS SECTION ////////////////////
+//
+// Pair Partner:     Jeff Tucker
+// Email:            jetucker@wisc.edu
+// CS Login:         jtucker
+// Lecturer's Name:  Jim Skrentny
+//
+//////////////////////////// 80 columns wide //////////////////////////////////
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,13 +95,14 @@ public class Repo {
     	if (searchName == null) {
 			throw new IllegalArgumentException();
 		}
-    	
+    	// Loop through all documents in current repo
 		for (Document d : this.docs) {
+			// Return the one with the name that matches
 			if (d.getName().equals(searchName)) {
 				return d;
 			}
 		}
-		
+		// If none are found, return null.
 		return null;
 	}
 	
@@ -142,8 +162,9 @@ public class Repo {
 	public ChangeSet getNextCheckIn(User requestingUser) {
 		if(requestingUser == null) throw new IllegalArgumentException("requestingUser");
 		if(requestingUser == admin && !checkIns.isEmpty()) {
-			try {
-			return checkIns.dequeue();
+			// Surrounded in a try-catch because although I have made sure that checkIns
+			try {	// is not empty, I still need to catch the exception because the instructors
+			return checkIns.dequeue();// made it a checked exception.
 			}
 			catch(EmptyQueueException ex) {
 				return null;
@@ -166,28 +187,29 @@ public class Repo {
 		if(requestingUser == null) throw new IllegalArgumentException("requestingUser");
 		if(checkIn == null) throw new IllegalArgumentException("checkIn");
 		if(requestingUser != admin) return ErrorType.ACCESS_DENIED;
-		// Explanation of how at: https://piazza.com/class/i574bznhxhp2ms?cid=616
 		Change currentChange;
 		while((currentChange = checkIn.getNextChange()) != null) {
 			switch(currentChange.getType()) {
-			case ADD:
+			case ADD: // Add a document to the repository
 				docs.add(currentChange.getDoc());
 				break;
-			case DEL:
+			case DEL: // Remove a document from the repository
 				docs.remove(currentChange.getDoc());
 				break;
 			case EDIT:
-				for(Document doc : docs) {
+				for(Document doc : docs) { // Find the correct document
 					if(doc.equals(currentChange.getDoc())) {
+						// Replace with the new content
 						doc.setContent(currentChange.getDoc().getContent());
 						break;
 					}
 				}
 				break;
-			default:
+			default: // Just in case a null or other invalid value made it through
 				throw new IllegalArgumentException();
 			}
 		}
+		// Create new version record and store it on the stack
 		RepoCopy copy = new RepoCopy(repoName, ++version, getDocuments());
 		versionRecords.push(copy);
 		return ErrorType.SUCCESS;
@@ -217,7 +239,7 @@ public class Repo {
 		for(Document doc : prevVersion.getDocuments()) { // Restore all prev docs
 			docs.add(new Document(doc.getName(), doc.getContent(), doc.getRepoName()));
 		}
-		--version;
+		--version; // Decrement the version count
 		return ErrorType.SUCCESS;
 	}
 }

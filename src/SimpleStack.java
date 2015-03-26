@@ -1,3 +1,22 @@
+///////////////////////////////////////////////////////////////////////////////
+//                   ALL STUDENTS COMPLETE THESE SECTIONS
+// Main Class File:  VersionControlApp.java
+// Semester:         CS367 Spring 2015
+//
+// Author:           Jeremy Koritzinsky
+// Email:            jeremy.koritzinsky@wisc.edu
+// CS Login:         koritzinsky
+// Lecturer's Name:  Jim Skrentny
+//
+//////////////////// PAIR PROGRAMMERS COMPLETE THIS SECTION ////////////////////
+//
+// Pair Partner:     Jeff Tucker
+// Email:            jetucker@wisc.edu
+// CS Login:         jtucker
+// Lecturer's Name:  Jim Skrentny
+//
+//////////////////////////// 80 columns wide //////////////////////////////////
+
 /**
  * @author Jeff
  *
@@ -64,6 +83,7 @@ public class SimpleStack<E> implements StackADT<E> {
 	 */
 	@Override
 	public void push(E item) {
+		if(item == null) throw new IllegalArgumentException("item");
 		if(items.length == numItems) {
 			expand();
 		}
