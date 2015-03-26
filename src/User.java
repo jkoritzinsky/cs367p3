@@ -57,7 +57,7 @@ public class User {
      */
     public RepoCopy getWorkingCopy(String repoName) {
     	if(repoName == null) throw new IllegalArgumentException("repoName");
-    	for(RepoCopy workingCopy : workingCopies) {
+    	for(RepoCopy workingCopy : workingCopies) { //A loop to check if the repo exists
 			if(workingCopy.getReponame().equals(repoName)) {
 				return workingCopy;
 			}
@@ -118,15 +118,16 @@ public class User {
 	 * @throws IllegalArgumentException if any argument is null. 
 	 */
 	public void addToPendingCheckIn(Document doc, Change.Type type, String repoName) {
+		//A few checks to make sure the input all exists
 		if(doc == null) throw new IllegalArgumentException("doc");
 		if(type == null) throw new IllegalArgumentException("type");
 		if(repoName == null) throw new IllegalArgumentException("repoName");
 		ChangeSet pendingCheckIn = getPendingCheckIn(repoName);
-		if(pendingCheckIn == null) {
+		if(pendingCheckIn == null) { //Checks if the checkin exists
 			pendingCheckIn = new ChangeSet(repoName);
-			pendingCheckIns.add(pendingCheckIn);
+			pendingCheckIns.add(pendingCheckIn); //adds the checkin
 		}
-		pendingCheckIn.addChange(doc, type);
+		pendingCheckIn.addChange(doc, type); //Adds the change
 	}
 	
 	/**
@@ -139,7 +140,7 @@ public class User {
     public ChangeSet getPendingCheckIn(String repoName) {
     	if(repoName == null) throw new IllegalArgumentException("repoName");
 		for(ChangeSet set : pendingCheckIns) {
-			if(set.getReponame().equals(repoName)) return set;
+			if(set.getReponame().equals(repoName)) return set; //checks for the repo with the given name
 		}
     	return null;
 	}
@@ -155,17 +156,17 @@ public class User {
 	public ErrorType checkIn(String repoName) {
 		if(repoName == null) throw new IllegalArgumentException("repoName");
 		ChangeSet checkIn = null;
-		for(int i = 0; i < pendingCheckIns.size(); ++i) {
-			ChangeSet set = pendingCheckIns.get(i);
-			if(set.getReponame().equals(repoName)) {
+		for(int i = 0; i < pendingCheckIns.size(); ++i) { //A loop over all of the pending checkins
+			ChangeSet set = pendingCheckIns.get(i); 
+			if(set.getReponame().equals(repoName)) { //A check for the specified repo
 				checkIn = set;
-				pendingCheckIns.remove(i);
+				pendingCheckIns.remove(i); 
 				break;
 			}
 		}
-		if(checkIn == null) return ErrorType.NO_LOCAL_CHANGES;
+		if(checkIn == null) return ErrorType.NO_LOCAL_CHANGES; //If there are no changes to make
 		Repo repo = VersionControlDb.findRepo(repoName);
-		repo.queueCheckIn(checkIn);
+		repo.queueCheckIn(checkIn); 
 		return ErrorType.SUCCESS;
 	}
 	

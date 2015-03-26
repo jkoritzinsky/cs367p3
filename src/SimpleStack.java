@@ -6,26 +6,34 @@ public class SimpleStack<E> implements StackADT<E> {
 	private static final int INITSIZE = 10;
 	private E items[];
 	private int numItems;
+	
 	/**
-	 * 
+	 *Creates the object
 	 */
 	public SimpleStack() {
 		items = (E[]) new Object[INITSIZE];
 		numItems = 0;
 	}
 
-
+	/**
+	 *Checks if the stack is empty
+	 */
 	@Override
 	public boolean isEmpty() {
 		return size() == 0;
 	}
-
+	
+	/**
+	 * Returns the size of the stack
+	 */
 	@Override
 	public int size() {
 		return numItems;
 	}
-
-
+	
+	/**
+	 * Increases the size of the stack
+	 */
 	private void expand() {
 		int newSize = items.length * 2;
 		E[] newItems = (E[]) new Object[newSize];
@@ -35,7 +43,9 @@ public class SimpleStack<E> implements StackADT<E> {
 		items = newItems;
 	}
 
-
+	/**
+	 * Returns the item on top of the stack and removes it from the top
+	 */
 	@Override
 	public E pop() throws EmptyStackException {
 		if(size() != 0) {
@@ -49,7 +59,9 @@ public class SimpleStack<E> implements StackADT<E> {
 		}
 	}
 
-
+	/**
+	 * Puts an item on top of the stack
+	 */
 	@Override
 	public void push(E item) {
 		if(items.length == numItems) {
@@ -59,7 +71,9 @@ public class SimpleStack<E> implements StackADT<E> {
 		numItems++;
 	}
 
-
+	/**
+	 * Checks what the item on top of the stack is, but doesn't take it off the top
+	 */
 	@Override
 	public E peek() throws EmptyStackException {
 		if(size() != 0) {
@@ -70,6 +84,9 @@ public class SimpleStack<E> implements StackADT<E> {
 		}
 	}
 	
+	/**
+	 * Returns the information in the stack as a string
+	 */
 	@Override 
 	public String toString() {
 		StringBuilder str = new StringBuilder();
