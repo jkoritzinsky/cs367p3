@@ -33,7 +33,8 @@ import java.util.Scanner;
 /**
  * Version control application. Implements the command line utility
  * for Version control.
- * @author
+ * <p>Bugs: None known
+ * @authors Jeremy and Jeff
  *
  */
 public class VersionControlApp {

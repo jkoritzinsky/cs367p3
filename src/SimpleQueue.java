@@ -18,6 +18,8 @@
 //////////////////////////// 80 columns wide //////////////////////////////////
 
 /**
+ * An implementation of a queue with a circular array
+ * <p>Bugs: None known
  * @author Jeremy
  *
  */

@@ -23,7 +23,8 @@ import java.util.List;
 /**
  * Represents a user. Maintains the list of subscribed repositories, working
  * copy of the subscribed repositories and their changelist. 
- * @author
+ * <p>Bugs: None known
+ * @authors Jeremy and Jeff
  *
  */
 public class User {

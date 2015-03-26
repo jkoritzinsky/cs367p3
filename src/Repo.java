@@ -23,7 +23,8 @@ import java.util.List;
 /**
  * Represents a repository which stores and tracks changes to a collection of 
  * documents.
- * @author
+ * <p>Bugs: None known
+ * @authors Jeremy
  *
  */
 public class Repo {

@@ -19,7 +19,8 @@
 
 /**
  * Represents a set of change(s) made to a repository.
- * @author
+ * <p>Bugs: None known
+ * @authors Jeremy
  *
  */
 public class ChangeSet {

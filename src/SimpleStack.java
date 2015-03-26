@@ -18,6 +18,8 @@
 //////////////////////////// 80 columns wide //////////////////////////////////
 
 /**
+ * An implementation of a stack with a circular array
+ * <p>Bugs: None known
  * @author Jeff
  *
  */
