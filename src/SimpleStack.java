@@ -71,6 +71,7 @@ public class SimpleStack<E> implements StackADT<E> {
 
 	@Override
 	public void push(E item) {
+		if(item == null) throw new IllegalArgumentException("item");
 		if(items.length == numItems) {
 			expand();
 		}
